@@ -51,7 +51,7 @@ void ACSGameMap::StaticActorsToMap() const
 
 		const auto Socket = NewObject<UStaticMeshSocket>(GameMap->GetStaticMesh());
 		Socket->Tag = MeshComp->GetStaticMesh()->GetName();
-		Socket->SocketName = TEXT("%s", );
+		// Socket->SocketName = TEXT("%s", );
 		GameMap->GetStaticMesh()->Sockets.Add(Socket);
 	}
 }
