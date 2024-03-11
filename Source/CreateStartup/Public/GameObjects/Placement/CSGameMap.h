@@ -25,12 +25,24 @@ protected:
 	UStaticMeshComponent* GameMap;
 
 	/** Array of classes of objects that map will try to generate. */
-	UPROPERTY(EditDefaultsOnly)
+	UPROPERTY(EditDefaultsOnly, meta=(Category="Placement"))
 	TArray<TSubclassOf<ACSPlacementObject>> PlacementObjects;
+
+	/** Map of static CSPlacementObject objects that will be just spawn on the game map. */
+	UPROPERTY(EditDefaultsOnly, meta=(Category="Placement"))
+	TArray<UStaticMesh*> StaticPlacementObjects;
 
 	virtual void BeginPlay() override;
 
 	/** Tries to spawn objects from PlacementObjects classes(if target sockets into GameMap mesh exist) */
-	UFUNCTION()
+	UFUNCTION(BlueprintCallable, meta=(Keywords="Spawn, Objects, Object"))
 	void SpawnObjects();
+
+	/** Scan level actors and add them to the GameMap static mesh asset. */
+	UFUNCTION(CallInEditor, Category="Editor Tools")
+	void StaticActorsToMap() const;
+	
+	/** Remove all sockets from GameMap static mesh asset. */
+	UFUNCTION(CallInEditor, Category="Editor Tools")
+	void RemoveSockets() const;
 };
