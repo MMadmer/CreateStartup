@@ -1,0 +1,65 @@
+{
+	"FileVersion": 3,
+	"EngineAssociation": "4.27",
+	"Category": "",
+	"Description": "",
+	"Modules": [
+		{
+			"Name": "CreateStartup",
+			"Type": "Runtime",
+			"LoadingPhase": "Default",
+			"AdditionalDependencies": [
+				"Engine",
+				"CoreUObject"
+			]
+		}
+	],
+	"Plugins": [
+		{
+			"Name": "GoogleARCore",
+			"Enabled": true,
+			"SupportedTargetPlatforms": [
+				"Android"
+			]
+		},
+		{
+			"Name": "AppleARKit",
+			"Enabled": true,
+			"SupportedTargetPlatforms": [
+				"IOS",
+				"Win64",
+				"Mac"
+			]
+		},
+		{
+			"Name": "GoogleARCoreServices",
+			"Enabled": true
+		},
+		{
+			"Name": "QuestEditor",
+			"Enabled": false,
+			"MarketplaceURL": "com.epicgames.launcher://ue/marketplace/product/b60ac0a5d2224b0c8ecebc14d4a1b178"
+		},
+		{
+			"Name": "VisualStudioTools",
+			"Enabled": true,
+			"MarketplaceURL": "com.epicgames.launcher://ue/marketplace/product/362651520df94e4fa65492dbcba44ae2",
+			"SupportedTargetPlatforms": [
+				"Win64"
+			]
+		},
+		{
+			"Name": "NPC_Optimizator",
+			"Enabled": true,
+			"MarketplaceURL": "com.epicgames.launcher://ue/marketplace/product/1d7dbb65f6b24b2db0401a80d07e84d9"
+		},
+		{
+			"Name": "ModelingToolsEditorMode",
+			"Enabled": true
+		}
+	],
+	"TargetPlatforms": [
+		"Android",
+		"IOS"
+	]
+}
