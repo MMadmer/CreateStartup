@@ -4,10 +4,11 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
+#include "Interface/CSEditorTools.h"
 #include "CSPlacementObject.generated.h"
 
 UCLASS()
-class CREATESTARTUP_API ACSPlacementObject : public AActor
+class CREATESTARTUP_API ACSPlacementObject : public AActor, public ICSEditorTools
 {
 	GENERATED_BODY()
 
@@ -20,6 +21,15 @@ public:
 	FName TargetSocketTag;
 
 	ACSPlacementObject();
+
+	// Interface
+	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, meta=(Category="EditorTools"))
+	UStaticMesh* GetMesh();
+	virtual UStaticMesh* GetMesh_Implementation() override;
+
+	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, meta=(Category="EditorTools"))
+	void SetMesh(UStaticMesh* NewMesh);
+	virtual void SetMesh_Implementation(UStaticMesh* NewMesh) override;
 
 	/** Tries to spawn objects from target class into each component's socket with compatible prefix. */
 	UFUNCTION(BlueprintCallable,

@@ -5,6 +5,7 @@
 
 #include "Engine/StaticMeshActor.h"
 #include "Engine/StaticMeshSocket.h"
+#include "Interface/CSEditorTools.h"
 #include "Kismet/GameplayStatics.h"
 
 ACSGameMap::ACSGameMap()
@@ -24,39 +25,79 @@ void ACSGameMap::BeginPlay()
 
 void ACSGameMap::SpawnObjects()
 {
-	for (const auto& PlacementObject : PlacementObjects)
+	for (const auto& StaticPlacementObject : PlacementObjects)
 	{
-		ACSPlacementObject::SpawnAttachedObjects(GameMap, PlacementObject);
-	}
-	for (const auto& StaticPlacementObject : StaticPlacementObjects)
-	{
-		ACSPlacementObject::SpawnAttachedObjectsStatic(GameMap, ACSPlacementObject::StaticClass(),
-		                                               StaticPlacementObject);
+		if (const auto SpecialClass = PlacementSpecial.Find(StaticPlacementObject))
+		{
+			ACSPlacementObject::SpawnAttachedObjectsStatic(GameMap, *SpecialClass, StaticPlacementObject);
+		}
+		else
+		{
+			ACSPlacementObject::SpawnAttachedObjectsStatic(GameMap, ACSPlacementObject::StaticClass(),
+			                                               StaticPlacementObject);
+		}
 	}
 }
 
-void ACSGameMap::StaticActorsToMap() const
+#if WITH_EDITORONLY_DATA
+void ACSGameMap::BakeLevelToMap()
 {
+	// Clearing map before update
+	ClearMap();
+
 	TArray<AActor*> Actors;
-	UGameplayStatics::GetAllActorsOfClass(GetWorld(), AStaticMeshActor::StaticClass(), Actors);
+	UGameplayStatics::GetAllActorsOfClass(GetWorld(), AActor::StaticClass(), Actors);
 
-	for (auto& Actor : Actors)
+	int Counter = 0;
+
+	for (const auto& Actor : Actors)
 	{
-		Actor = Cast<AStaticMeshActor>(Actor);
-		if (!Actor) continue;
+		UStaticMesh* ActorMesh;
 
-		const UStaticMeshComponent* MeshComp = Cast<UStaticMeshComponent>(
-			Actor->GetComponentByClass(UStaticMeshComponent::StaticClass()));
-		if (!MeshComp) continue;
+		if (Cast<AStaticMeshActor>(Actor))
+		{
+			const UStaticMeshComponent* MeshComp = Cast<UStaticMeshComponent>(
+				Actor->GetComponentByClass(UStaticMeshComponent::StaticClass()));
+			if (!MeshComp) continue;
+
+			ActorMesh = MeshComp->GetStaticMesh();
+		}
+		else
+		{
+			ActorMesh = Actor->Implements<UCSEditorTools>() ? ICSEditorTools::Execute_GetMesh(Actor) : nullptr;
+		}
+		if (!ActorMesh) continue;
+
+		if (Cast<ACSPlacementObject>(Actor))
+		{
+			PlacementSpecial.Add(ActorMesh, Actor->GetClass());
+		}
 
 		const auto Socket = NewObject<UStaticMeshSocket>(GameMap->GetStaticMesh());
-		Socket->Tag = MeshComp->GetStaticMesh()->GetName();
-		// Socket->SocketName = TEXT("%s", );
+		Socket->Tag = ActorMesh->GetName();
+		Socket->SocketName = FName(*FString::Printf(TEXT("Generated_%i"), Counter));
+
+		FTransform MapTransform = GetActorTransform();
+		FTransform SocketTransform = Actor->GetActorTransform().GetRelativeTransform(MapTransform);
+		SocketTransform.SetLocation(
+			SocketTransform.GetLocation() - 4.0f * FVector(0.0f, 0.0f, GameMap->Bounds.BoxExtent.Z));
+
+		Socket->RelativeLocation = SocketTransform.GetLocation();
+		Socket->RelativeRotation = SocketTransform.Rotator();
+		Socket->RelativeScale = SocketTransform.GetScale3D();
+		Socket->PreviewStaticMesh = ActorMesh;
 		GameMap->GetStaticMesh()->Sockets.Add(Socket);
+
+		PlacementObjects.AddUnique(ActorMesh);
+
+		Counter++;
 	}
 }
 
-void ACSGameMap::RemoveSockets() const
+void ACSGameMap::ClearMap()
 {
-	GameMap->GetStaticMesh()->Sockets.RemoveAll([](UStaticMeshSocket* Item) { return true; });
+	PlacementSpecial.Empty();
+	PlacementObjects.Empty();
+	GameMap->GetStaticMesh()->Sockets.Empty();
 }
+#endif

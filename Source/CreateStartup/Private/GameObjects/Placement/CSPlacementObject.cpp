@@ -14,6 +14,16 @@ ACSPlacementObject::ACSPlacementObject()
 	SetRootComponent(StaticMesh);
 }
 
+UStaticMesh* ACSPlacementObject::GetMesh_Implementation()
+{
+	return StaticMesh->GetStaticMesh();
+}
+
+void ACSPlacementObject::SetMesh_Implementation(UStaticMesh* NewMesh)
+{
+	StaticMesh->SetStaticMesh(NewMesh);
+}
+
 void ACSPlacementObject::BeginPlay()
 {
 	Super::BeginPlay();

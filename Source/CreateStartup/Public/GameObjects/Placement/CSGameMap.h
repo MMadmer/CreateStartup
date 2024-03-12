@@ -24,25 +24,29 @@ protected:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 	UStaticMeshComponent* GameMap;
 
-	/** Array of classes of objects that map will try to generate. */
-	UPROPERTY(EditDefaultsOnly, meta=(Category="Placement"))
-	TArray<TSubclassOf<ACSPlacementObject>> PlacementObjects;
+	/** Map of special placement classes that will be spawned instead of target static mesh. */
+	UPROPERTY(EditAnywhere, meta=(Category="Placement"))
+	TMap<UStaticMesh*, TSubclassOf<ACSPlacementObject>> PlacementSpecial;
 
-	/** Map of static CSPlacementObject objects that will be just spawn on the game map. */
-	UPROPERTY(EditDefaultsOnly, meta=(Category="Placement"))
-	TArray<UStaticMesh*> StaticPlacementObjects;
+	/** Array of static CSPlacementObject objects that will be just spawn on the game map. */
+	UPROPERTY(EditAnywhere, meta=(Category="Placement"))
+	TArray<UStaticMesh*> PlacementObjects;
 
 	virtual void BeginPlay() override;
 
-	/** Tries to spawn objects from PlacementObjects classes(if target sockets into GameMap mesh exist) */
+	/** Tries to spawn objects from PlacementObjects classes(if target sockets into GameMap mesh exist).
+	 *	StaticPlacementObjects array will be overwritten.
+	 */
 	UFUNCTION(BlueprintCallable, meta=(Keywords="Spawn, Objects, Object"))
 	void SpawnObjects();
 
-	/** Scan level actors and add them to the GameMap static mesh asset. */
+#if WITH_EDITORONLY_DATA
+	/** Scan level actors and add them to the GameMap static mesh asset(auto clears the map before scanning). */
 	UFUNCTION(CallInEditor, Category="Editor Tools")
-	void StaticActorsToMap() const;
-	
+	void BakeLevelToMap();
+
 	/** Remove all sockets from GameMap static mesh asset. */
 	UFUNCTION(CallInEditor, Category="Editor Tools")
-	void RemoveSockets() const;
+	void ClearMap();
+#endif
 };
