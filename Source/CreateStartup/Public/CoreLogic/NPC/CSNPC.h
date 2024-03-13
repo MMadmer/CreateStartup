@@ -10,17 +10,15 @@ UCLASS()
 class CREATESTARTUP_API ACSNPC : public AActor
 {
 	GENERATED_BODY()
-	
-public:	
-	// Sets default values for this actor's properties
+
+public:
 	ACSNPC();
-
-protected:
-	// Called when the game starts or when spawned
-	virtual void BeginPlay() override;
-
-public:	
-	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
+protected:
+	/** Client money. */
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Client info", meta=(ClampMin="0", UIMin="0"))
+	float MaxSpeed;
+
+	virtual void BeginPlay() override;
 };

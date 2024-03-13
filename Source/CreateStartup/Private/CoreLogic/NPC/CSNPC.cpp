@@ -8,6 +8,7 @@ ACSNPC::ACSNPC()
 	PrimaryActorTick.bCanEverTick = false;
 	PrimaryActorTick.bStartWithTickEnabled = false;
 
+	MaxSpeed = 0;
 }
 
 void ACSNPC::BeginPlay()
