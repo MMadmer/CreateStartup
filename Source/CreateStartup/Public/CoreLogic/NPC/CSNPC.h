@@ -17,7 +17,7 @@ public:
 
 protected:
 	/** Client money. */
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Client info", meta=(ClampMin="0", UIMin="0"))
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Client info", meta=(ClampMin="0.0", UIMin="0.0"))
 	float MaxSpeed;
 
 	virtual void BeginPlay() override;
