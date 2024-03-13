@@ -9,12 +9,14 @@ ACSNPC::ACSNPC()
 	PrimaryActorTick.bStartWithTickEnabled = false;
 
 	MaxSpeed = 0;
+
+	SkeletalMeshComponent = CreateDefaultSubobject<USkeletalMeshComponent>("SkeletalMesh");
+	SetRootComponent(SkeletalMeshComponent);
 }
 
 void ACSNPC::BeginPlay()
 {
 	Super::BeginPlay();
-	
 }
 
 void ACSNPC::Tick(float DeltaTime)

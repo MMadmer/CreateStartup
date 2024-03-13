@@ -22,7 +22,7 @@ public:
 	void TryTakeMoney(int32& TakenMoney, int32& NotEnough, const int32 MoneyToTake);
 
 protected:
-	/** Client money. */
+	/** Client's money. */
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Client info", meta=(ClampMin="0", UIMin="0"))
 	int32 Money;
 

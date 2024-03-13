@@ -16,7 +16,10 @@ public:
 	virtual void Tick(float DeltaTime) override;
 
 protected:
-	/** Client money. */
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
+	USkeletalMeshComponent* SkeletalMeshComponent;
+	
+	/** NPC's max speed. */
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Client info", meta=(ClampMin="0.0", UIMin="0.0"))
 	float MaxSpeed;
 
