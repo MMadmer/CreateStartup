@@ -27,7 +27,7 @@ void ACSGameMap::SpawnObjects()
 {
 	for (const auto& StaticPlacementObject : PlacementObjects)
 	{
-		if (const auto SpecialClass = PlacementSpecial.Find(StaticPlacementObject))
+		if (const auto& SpecialClass = PlacementSpecial.Find(StaticPlacementObject))
 		{
 			ACSPlacementObject::SpawnAttachedObjectsStatic(GameMap, *SpecialClass, StaticPlacementObject);
 		}
@@ -39,9 +39,9 @@ void ACSGameMap::SpawnObjects()
 	}
 }
 
-#if WITH_EDITORONLY_DATA
 void ACSGameMap::BakeLevelToMap()
 {
+#if WITH_EDITORONLY_DATA
 	// Clearing map before update
 	ClearMap();
 
@@ -92,12 +92,14 @@ void ACSGameMap::BakeLevelToMap()
 
 		Counter++;
 	}
+#endif
 }
 
 void ACSGameMap::ClearMap()
 {
+#if WITH_EDITORONLY_DATA
 	PlacementSpecial.Empty();
 	PlacementObjects.Empty();
 	GameMap->GetStaticMesh()->Sockets.Empty();
-}
 #endif
+}

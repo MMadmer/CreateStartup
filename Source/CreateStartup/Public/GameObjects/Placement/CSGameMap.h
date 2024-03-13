@@ -40,7 +40,6 @@ protected:
 	UFUNCTION(BlueprintCallable, meta=(Keywords="Spawn, Objects, Object"))
 	void SpawnObjects();
 
-#if WITH_EDITORONLY_DATA
 	/** Scan level actors and add them to the GameMap static mesh asset(auto clears the map before scanning). */
 	UFUNCTION(CallInEditor, Category="Editor Tools")
 	void BakeLevelToMap();
@@ -48,5 +47,4 @@ protected:
 	/** Remove all sockets from GameMap static mesh asset. */
 	UFUNCTION(CallInEditor, Category="Editor Tools")
 	void ClearMap();
-#endif
 };
