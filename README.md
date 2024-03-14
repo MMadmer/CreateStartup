@@ -23,7 +23,7 @@ git clone https://github.com/MMadmer/CreateStartup.git
 
 After cloning the repository, navigate to the project directory and generate the Visual Studio files using the context menu.
 
-![image](https://github.com/MMadmer/CreateStartup/assets/51472243/a93c4c0f-f877-44eb-86a8-fe1ac1167545)
+![image](https://github.com/MMadmer/CreateStartup/assets/51472243/816e6f95-eaaf-4da6-b8b3-37acf577a6b6)
 
 ### Opening the Project in Visual Studio
 
@@ -37,8 +37,9 @@ After opening the project in Visual Studio, follow these steps to compile the so
 2. Click on the Build menu, then select Build Solution (or use `Ctrl + Shift + B`).
 3. Wait for the compilation process to complete.
 
-![image](https://github.com/MMadmer/CreateStartup/assets/51472243/ddbf145d-8d10-44ff-b697-3d038d2655fb)
-![image](https://github.com/MMadmer/CreateStartup/assets/51472243/dc531416-3650-40e4-8abd-99b36967a59b)
+![image](https://github.com/MMadmer/CreateStartup/assets/51472243/e0cb8f0b-982c-4a06-9a78-72634566ea52)
+![image](https://github.com/MMadmer/CreateStartup/assets/51472243/8ae4c018-643b-428b-81ed-88cbac3be8ba)
+
 
 ## Opening the Project in Unreal Engine Editor
 
@@ -52,7 +53,8 @@ After successfully compiling the solution, follow these steps to open the projec
 Or these steps:
 1. Navigate to the directory where you cloned the repository.
 2. Double-click on `CreateStartup.uproject`.
-![image](https://github.com/MMadmer/CreateStartup/assets/51472243/eb352018-4c82-49f9-8436-349493dc6ef2)
+![image](https://github.com/MMadmer/CreateStartup/assets/51472243/5d00dd77-4103-433c-8762-cbcc185ff3f7)
+
 
 
 ## License
