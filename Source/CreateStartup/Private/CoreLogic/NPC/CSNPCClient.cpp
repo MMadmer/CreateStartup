@@ -8,6 +8,11 @@ ACSNPCClient::ACSNPCClient()
 	Money = 0;
 }
 
+void ACSNPCClient::BusinessEntered_Implementation(ACSInteractableObject* ProductCount)
+{
+	
+}
+
 void ACSNPCClient::TryTakeMoney(int32& TakenMoney, int32& NotEnough, const int32 MoneyToTake)
 {
 	if (Money >= MoneyToTake)

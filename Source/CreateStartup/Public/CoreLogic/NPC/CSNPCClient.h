@@ -4,18 +4,25 @@
 
 #include "CoreMinimal.h"
 #include "CoreLogic/NPC/CSNPC.h"
+#include "Interface/CSBusiness.h"
 #include "CSNPCClient.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class CREATESTARTUP_API ACSNPCClient : public ACSNPC
+class CREATESTARTUP_API ACSNPCClient : public ACSNPC, public ICSBusiness
 {
 	GENERATED_BODY()
 
 public:
 	ACSNPCClient();
+
+	// Interface
+	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, meta=(Category="Business|Client"))
+	void BusinessEntered(ACSInteractableObject* ProductCount);
+	void BusinessEntered_Implementation(ACSInteractableObject* ProductCount) override;
+	
 
 	/** Tries to take money from client. Not enough will > 0 and money will not be taken if MoneyToTake > than Money. */
 	UFUNCTION(BlueprintCallable, meta=(Keywords="Try, Take, Money"))
