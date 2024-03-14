@@ -1,6 +1,7 @@
 # CreateStartup
 
 This repository contains a C++ project based on the Unreal Engine. Follow the steps below to open the project successfully.
+The game was tested on android 7. But maybe compatible up to android 9.
 
 ## Getting Started
 
