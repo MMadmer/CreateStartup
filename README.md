@@ -37,7 +37,7 @@ Once the Visual Studio files are generated, locate the `CreateStartup.sln` file 
 
 After opening the project in Visual Studio, follow these steps to compile the solution:
 
-1. Select the appropriate build configuration `Development` and `Win64`(or `Android` but you need to install android SDK, NDK and java first) from the toolbar.
+1. Select the appropriate build configuration `DevelopmentEditor` and `Win64`(or `Android` but you need to install android SDK, NDK and java first) from the toolbar.
 2. Click on the Build menu, then select Build Solution (or use `Ctrl + Shift + B`).
 3. Wait for the compilation process to complete.
 
