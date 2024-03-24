@@ -11,7 +11,9 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnSessionChangedSignature,
                                              bool, SessionRunning,
                                              EARSessionStatus, SessionStatus);
 
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnTrackedImageFoundSignature, UARTrackedImage*, FoundImage);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnPlayerFoundPlaneSignature,
+                                             UARPlaneGeometry*, PlaneGeometry,
+                                             APlayerController*, PlayerController);
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnScanActiveChangedSignature, bool, IsScanActive);
 
@@ -29,8 +31,8 @@ public:
 	FOnSessionChangedSignature OnSessionChanged;
 
 	/** Called when any AR camera found image(returns first found image from session). */
-	UPROPERTY(BlueprintAssignable)
-	FOnTrackedImageFoundSignature OnTrackedImageFound;
+	UPROPERTY(BlueprintAssignable, meta=(DeprecatedProperty))
+	FOnPlayerFoundPlaneSignature OnPlayerFoundPlane;
 
 	/** Called when scanning status changes(not a session). */
 	UPROPERTY(BlueprintAssignable)
@@ -51,16 +53,27 @@ public:
 	// USubsystem implementation End
 
 	/** Get current AR session status. */
-	UFUNCTION(BlueprintPure, meta=(Keywords="Get, AR, Session, Status"))
+	UFUNCTION(BlueprintPure, meta=(Keywords="Get AR Session Status"))
 	static FARSessionStatus GetARSessionStatus();
 
 	/** Get current AR session config. */
-	UFUNCTION(BlueprintPure, meta=(Keywords="Get, AR, Session, Config"))
+	UFUNCTION(BlueprintPure, meta=(Keywords="Get AR Session Config"))
 	static UARSessionConfig* GetARSessionConfig();
 
+	/** Get is scan active. */
+	UFUNCTION(BlueprintPure, meta=(Keywords="Get Is Scan Active"))
+	FORCEINLINE bool GetIsScanActive() const { return bIsScanActive; }
+
 	/** Set scanning status(AR session must be running to scan). */
-	UFUNCTION(BlueprintCallable, meta=(Keywords="Set, Is, Scan, Active"))
-	void SetIsScanActive(bool Active);
+	UFUNCTION(BlueprintCallable, meta=(Keywords="Set Is Scan Active"))
+	void SetIsScanActive(const bool Active);
+
+	/** Returns nearest plane(or nullptr) under target screen coordinates. */
+	UFUNCTION(BlueprintCallable, meta=(Keywords="Get Nearest Plane By Line Trace"))
+	UARPlaneGeometry* GetNearestPlaneByLineTrace(const FVector2D& ScreenPoint);
+	/** Returns all found planes. */
+	UFUNCTION(BlueprintCallable, meta=(Keywords="Get Found Planes"))
+	TArray<UARPlaneGeometry*> GetFoundPlanes();
 
 protected:
 	/** Return current AR session is running or not. */
@@ -72,5 +85,4 @@ protected:
 	bool bIsScanActive = false;
 
 	void UpdateSessionStatus();
-	void FindImage() const;
 };

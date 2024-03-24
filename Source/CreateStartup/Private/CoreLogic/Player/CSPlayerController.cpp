@@ -3,6 +3,8 @@
 
 #include "CoreLogic/Player/CSPlayerController.h"
 
+#include "CoreLogic/Subsystems/CSARSubsystem.h"
+
 ACSPlayerController::ACSPlayerController()
 {
 	PrimaryActorTick.bStartWithTickEnabled = true;
@@ -43,6 +45,19 @@ bool ACSPlayerController::InputTouch(uint32 Handle, ETouchType::Type Type, const
 					{
 					case ETouchType::Began:
 						HitResult.Actor->OnInputTouchBegin.Broadcast(ETouchIndex::Touch1, GetPawn());
+
+						if (UCSARSubsystem* ARSubsystem = GetWorld()->GetSubsystem<UCSARSubsystem>())
+						{
+							if (ARSubsystem->GetIsScanActive())
+							{
+								if (UARPlaneGeometry* PlaneGeometry = ARSubsystem->GetNearestPlaneByLineTrace(
+									FVector2D(ScreenX, ScreenY)))
+								{
+									ARSubsystem->OnPlayerFoundPlane.Broadcast(PlaneGeometry, this);
+								}
+							}
+						}
+
 						break;
 					case ETouchType::Ended:
 						HitResult.Actor->OnInputTouchEnd.Broadcast(ETouchIndex::Touch1, GetPawn());

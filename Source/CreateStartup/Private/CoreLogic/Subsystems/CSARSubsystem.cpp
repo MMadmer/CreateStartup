@@ -22,7 +22,6 @@ void UCSARSubsystem::Tick(float DeltaTime)
 
 	if (bIsScanActive)
 	{
-		FindImage();
 	}
 }
 
@@ -36,13 +35,40 @@ UARSessionConfig* UCSARSubsystem::GetARSessionConfig()
 	return UARBlueprintLibrary::GetSessionConfig();
 }
 
-void UCSARSubsystem::SetIsScanActive(bool Active)
+void UCSARSubsystem::SetIsScanActive(const bool Active)
 {
 	if (bIsScanActive != Active)
 	{
 		bIsScanActive = Active;
 		OnScanActiveChanged.Broadcast(bIsScanActive);
 	}
+}
+
+UARPlaneGeometry* UCSARSubsystem::GetNearestPlaneByLineTrace(const FVector2D& ScreenPoint)
+{
+	TArray<FARTraceResult> TrackedObjects = UARBlueprintLibrary::LineTraceTrackedObjects(
+		ScreenPoint, false, true, true, true);
+
+	return Cast<UARPlaneGeometry>(TrackedObjects.IsValidIndex(0)
+		                              ? TrackedObjects[0].GetTrackedGeometry()
+		                              : nullptr);
+}
+
+TArray<UARPlaneGeometry*> UCSARSubsystem::GetFoundPlanes()
+{
+	TArray<UARPlaneGeometry*> PlaneGeometries;
+	TArray<UARTrackedGeometry*> TrackedGeometries = UARBlueprintLibrary::GetAllGeometriesByClass(
+		UARPlaneGeometry::StaticClass());
+
+	for (const auto TrackedGeometry : TrackedGeometries)
+	{
+		UARPlaneGeometry* PlaneGeometry = Cast<UARPlaneGeometry>(TrackedGeometry);
+		if (!PlaneGeometry) continue;
+
+		PlaneGeometries.Add(PlaneGeometry);
+	}
+
+	return PlaneGeometries;
 }
 
 void UCSARSubsystem::UpdateSessionStatus()
@@ -65,12 +91,4 @@ void UCSARSubsystem::UpdateSessionStatus()
 			OnSessionChanged.Broadcast(bSessionIsRunning, CurrentSessionStatus);
 		}
 	}
-}
-
-void UCSARSubsystem::FindImage() const
-{
-	auto FoundImages = UARBlueprintLibrary::GetAllGeometriesByClass(UARTrackedImage::StaticClass());
-	if (!FoundImages.IsValidIndex(0)) return;
-
-	OnTrackedImageFound.Broadcast(Cast<UARTrackedImage>(FoundImages[0]));
 }
