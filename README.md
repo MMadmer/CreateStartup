@@ -12,6 +12,9 @@ Before getting started, ensure you have the following installed on your system:
 - Unreal Engine (4.27.2)
 - Visual Studio (any version)
 
+- ![image](https://github.com/MMadmer/CreateStartup/assets/51472243/d99edf4e-921e-47e2-affd-788aace010ba)
+
+
 ### Cloning the Repository
 
 To clone this repository, run the following command:
@@ -34,7 +37,7 @@ Once the Visual Studio files are generated, locate the `CreateStartup.sln` file 
 
 After opening the project in Visual Studio, follow these steps to compile the solution:
 
-1. Select the appropriate build configuration `Development` and `Win64`(or `Android` but you need to install android SDK, NDK and java first) from the toolbar.
+1. Select the appropriate build configuration `DevelopmentEditor` and `Win64`(or `Android` but you need to install android SDK, NDK and java first) from the toolbar.
 2. Click on the Build menu, then select Build Solution (or use `Ctrl + Shift + B`).
 3. Wait for the compilation process to complete.
 
