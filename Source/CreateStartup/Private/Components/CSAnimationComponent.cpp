@@ -3,6 +3,8 @@
 
 #include "Components/CSAnimationComponent.h"
 
+#include "Kismet/KismetSystemLibrary.h"
+
 UCSAnimationComponent::UCSAnimationComponent()
 {
 	PrimaryComponentTick.bCanEverTick = false;
@@ -11,6 +13,7 @@ UCSAnimationComponent::UCSAnimationComponent()
 	AnimationFrameRate = 30;
 	ScaleAmplitude = 0.2f;
 	TotalFrames = AnimationFrameRate * AnimationTime;
+	CurrentFrame = 0;
 }
 
 void UCSAnimationComponent::BeginPlay()

@@ -69,7 +69,7 @@ protected:
 
 	/** Get scanning status(AR session must be running to scan). */
 	UPROPERTY(BlueprintReadOnly)
-	bool bIsScanActive = true;
+	bool bIsScanActive = false;
 
 	void UpdateSessionStatus();
 	void FindImage() const;
