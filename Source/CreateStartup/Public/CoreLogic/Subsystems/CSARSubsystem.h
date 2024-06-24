@@ -11,10 +11,6 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnSessionChangedSignature,
                                              bool, SessionRunning,
                                              EARSessionStatus, SessionStatus);
 
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnPlayerFoundPlaneSignature,
-                                             UARPlaneGeometry*, PlaneGeometry,
-                                             APlayerController*, PlayerController);
-
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnScanActiveChangedSignature, bool, IsScanActive);
 
 /**
@@ -29,10 +25,6 @@ public:
 	/** Called when session status changes(from running to any or from any to running). */
 	UPROPERTY(BlueprintAssignable)
 	FOnSessionChangedSignature OnSessionChanged;
-
-	/** Called when any AR camera found image(returns first found image from session). */
-	UPROPERTY(BlueprintAssignable, meta=(DeprecatedProperty))
-	FOnPlayerFoundPlaneSignature OnPlayerFoundPlane;
 
 	/** Called when scanning status changes(not a session). */
 	UPROPERTY(BlueprintAssignable)
@@ -70,7 +62,8 @@ public:
 
 	/** Returns nearest plane(or nullptr) under target screen coordinates. */
 	UFUNCTION(BlueprintCallable, meta=(Keywords="Get Nearest Plane By Line Trace"))
-	UARPlaneGeometry* GetNearestPlaneByLineTrace(const FVector2D& ScreenPoint);
+	FARTraceResult GetNearestPlaneByLineTrace(const FVector2D& ScreenPoint);
+	
 	/** Returns all found planes. */
 	UFUNCTION(BlueprintCallable, meta=(Keywords="Get Found Planes"))
 	TArray<UARPlaneGeometry*> GetFoundPlanes();

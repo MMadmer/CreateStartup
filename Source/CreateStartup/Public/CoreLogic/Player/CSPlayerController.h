@@ -3,9 +3,12 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "ARTraceResult.h"
 #include "GameFramework/PlayerController.h"
 #include "CoreLogic/Player/CSPlayerState.h"
 #include "CSPlayerController.generated.h"
+
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnPlaneTouchedSignature, FARTraceResult, TraceObject);
 
 /**
  * 
@@ -16,6 +19,9 @@ class CREATESTARTUP_API ACSPlayerController : public APlayerController
 	GENERATED_BODY()
 
 public:
+	UPROPERTY(BlueprintAssignable)
+	FOnPlaneTouchedSignature OnPlaneTouched;
+	
 	ACSPlayerController();
 
 	/** Returns CSPlayerState. */

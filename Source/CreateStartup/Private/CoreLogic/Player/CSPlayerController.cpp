@@ -21,48 +21,47 @@ bool ACSPlayerController::InputTouch(uint32 Handle, ETouchType::Type Type, const
 {
 	const bool Result = Super::InputTouch(Handle, Type, TouchLocation, Force, DeviceTimestamp, TouchpadIndex);
 
-	if (Type == ETouchType::Began || Type == ETouchType::Ended)
+	int32 ScreenX = 0;
+	int32 ScreenY = 0;
+	GetViewportSize(ScreenX, ScreenY);
+
+	UCSARSubsystem* ARSubsystem = GetWorld()->GetSubsystem<UCSARSubsystem>();
+	if (ARSubsystem && ARSubsystem->GetIsScanActive())
 	{
-		int32 ScreenX = 0;
-		int32 ScreenY = 0;
-		GetViewportSize(ScreenX, ScreenY);
-
-		FVector ScreenWorldLocation{};
-		FVector ScreenWorldDirection{};
-
-		if (DeprojectScreenPositionToWorld(ScreenX, ScreenY, ScreenWorldLocation, ScreenWorldDirection))
+		FARTraceResult PlaneGeometry = ARSubsystem->GetNearestPlaneByLineTrace(FVector2D(ScreenX, ScreenY));
+		if (PlaneGeometry.GetTrackedGeometry())
 		{
-			if (GetWorld())
+			OnPlaneTouched.Broadcast(PlaneGeometry);
+		}
+	}
+	else
+	{
+		if (Type == ETouchType::Began || Type == ETouchType::Ended)
+		{
+			FVector ScreenWorldLocation{};
+			FVector ScreenWorldDirection{};
+
+			if (DeprojectScreenPositionToWorld(ScreenX, ScreenY, ScreenWorldLocation, ScreenWorldDirection))
 			{
-				const FVector StartLocation = ScreenWorldLocation;
-				const FVector EndLocation = StartLocation + (ScreenWorldDirection * TouchTraceLength);
-				FHitResult HitResult{};
-
-				if (GetWorld()->LineTraceSingleByObjectType(HitResult, StartLocation, EndLocation,
-				                                            FCollisionObjectQueryParams::AllObjects))
+				if (GetWorld())
 				{
-					switch (Type)
+					const FVector StartLocation = ScreenWorldLocation;
+					const FVector EndLocation = StartLocation + (ScreenWorldDirection * TouchTraceLength);
+					FHitResult HitResult{};
+
+					if (GetWorld()->LineTraceSingleByObjectType(HitResult, StartLocation, EndLocation,
+					                                            FCollisionObjectQueryParams::AllObjects))
 					{
-					case ETouchType::Began:
-						HitResult.Actor->OnInputTouchBegin.Broadcast(ETouchIndex::Touch1, GetPawn());
-
-						if (UCSARSubsystem* ARSubsystem = GetWorld()->GetSubsystem<UCSARSubsystem>())
+						switch (Type)
 						{
-							if (ARSubsystem->GetIsScanActive())
-							{
-								if (UARPlaneGeometry* PlaneGeometry = ARSubsystem->GetNearestPlaneByLineTrace(
-									FVector2D(ScreenX, ScreenY)))
-								{
-									ARSubsystem->OnPlayerFoundPlane.Broadcast(PlaneGeometry, this);
-								}
-							}
+						case ETouchType::Began:
+							HitResult.Actor->OnInputTouchBegin.Broadcast(ETouchIndex::Touch1, GetPawn());
+							break;
+						case ETouchType::Ended:
+							HitResult.Actor->OnInputTouchEnd.Broadcast(ETouchIndex::Touch1, GetPawn());
+							break;
+						default: ;
 						}
-
-						break;
-					case ETouchType::Ended:
-						HitResult.Actor->OnInputTouchEnd.Broadcast(ETouchIndex::Touch1, GetPawn());
-						break;
-					default: ;
 					}
 				}
 			}
